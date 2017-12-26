@@ -1,0 +1,1143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0040)http://ibc86.net/index.php?r=site/Result -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>Result</title>
+<link href="./Result_files/table_w.css" rel="stylesheet" type="text/css">
+<link href="./Result_files/button.css" rel="stylesheet" type="text/css">
+<link href="./Result_files/oddsFamily.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" media="all" href="./Result_files/calendar-blue.css" title="win2k-cold-1">
+<script language="JavaScript" type="text/javascript" src="./Result_files/jquery.min.js"></script>
+<script type="text/javascript" src="./Result_files/calendar.js"></script>
+<script type="text/javascript" src="./Result_files/calendar-en.js"></script>
+<script type="text/javascript" src="./Result_files/calendar-setup.js"></script>
+<script type="text/javascript" src="./Result_files/DivLauncher.js"></script>
+<script type="text/javascript" src="./Result_files/common.js"></script>
+<script language="JavaScript" type="text/javascript" src="./Result_files/isPad.js"></script>
+<script type="text/javascript">
+function SelectChange(mode, selsport, selleague) {
+	document.forms.form1.mode.value = mode;
+	var selob = document.getElementById("selDate");
+    document.forms.form1.selectDate.value = selob.innerHTML;
+	if (mode == 'sport') {
+        document.forms.form1.sportType.value = selsport;
+    }
+    else {
+        document.forms.form1.sportType.value = selsport;
+        document.forms.form1.league.value = selleague;
+    }
+    document.getElementById('ResultItem').style.display = "none";
+    document.getElementById("WaitLoading").style.display = "block";
+	document.forms.form1.submit();
+}
+
+function dateSubmit(datediff) {
+	var dateValue = 86400000 * datediff;
+	var today = new Date();
+    
+	var displayDateValue = today.getTime() + dateValue;
+	var newDate = new Date();
+	newDate.setTime(displayDateValue);
+
+	var displayfield = newDate.getMonth() + 1 + "/" + padLeft(newDate.getDate(), 2) + "/" + newDate.getFullYear();
+	document.forms.form1.selectDate.value = displayfield;
+	document.getElementById('ResultItem').style.display = "none";
+	document.getElementById("WaitLoading").style.display = "block";
+	document.forms.form1.submit();
+}
+
+function padLeft(str, length) {
+    if (str.toString().length >= length)
+        return str;
+    else
+        return padLeft("0" + str, length);
+} 
+
+function changeBGClass(ObjName, clsName) {
+	for (var i = 0; i < 10; i++) {
+        var trName = 'tr' + i;
+        var trName = document.getElementById(ObjName + "_" + i);
+	    if(trName != null) {
+	        trName.className = clsName;
+	    }
+    }
+}
+
+function dateChanged(calendar) {
+	if (calendar.dateClicked) {
+		var y = calendar.date.getFullYear();
+		var m = calendar.date.getMonth(); // integer, 0..11
+		var d = padLeft(calendar.date.getDate(), 2); // integer, 1..31
+		var selob = document.getElementById("selDate");
+		selob.innerHTML = (m+1) + "/" + d + "/" + y ;
+		document.forms.form1.selectDate.value = (m + 1) + "/" + d + "/" + y;
+		document.getElementById('ResultItem').style.display = "none";
+		document.getElementById("WaitLoading").style.display = "block";
+		document.forms.form1.submit();
+	}
+}
+
+var MoreLauncher;
+var iX; 
+var iY;
+	
+function popSCRInfo(EventDate,LeagueId,RaceNumber) {
+	var oDiv;
+	var oDragger;
+	var oCloser;
+	
+	if (MoreLauncher != null){
+		MoreLauncher.close();
+	}
+
+	document.getElementById("oMoreContainer").innerHTML = "";
+	
+	document.SCRInfoForm.EventDate.value = EventDate;
+	document.SCRInfoForm.LeagueId.value = LeagueId;
+	document.SCRInfoForm.RaceNumber.value = RaceNumber;
+	document.SCRInfoForm.submit();
+		
+	oDiv = document.getElementById("MoreDiv");
+	oDragger = document.getElementById("MoreTitle");
+	oCloser = document.getElementById("MoreCloser");
+	var Sender = document.getElementById("SCRPos_" + RaceNumber);
+	MoreLauncher = new DivLauncher(oDiv, oDragger, oCloser);
+	var aObj = Sender;
+	iX = 0;
+	iY = 0;
+	while (aObj.offsetParent != null) {
+		iX += aObj.offsetLeft;
+		iY += aObj.offsetTop;
+		aObj = aObj.offsetParent;
+	}
+	iX -= document.documentElement.scrollLeft;
+	iY -= document.documentElement.scrollTop;
+	iX += Sender.clientWidth - 310;
+	iY += Sender.clientHeight + 18;
+	MoreLauncher.open(iX, iY);
+}
+
+function popBingoSeq(MatchId, SelFrom,MatchStatus) {
+	var oDiv;
+	var oDragger;
+	var oCloser;
+	
+	if (MoreLauncher != null){
+		MoreLauncher.close();
+	}
+
+	document.getElementById("oMoreContainer").innerHTML = "";
+	
+	document.BingoSeqForm.MatchId.value = MatchId;
+	document.BingoSeqForm.SelFrom.value = SelFrom;	
+	document.BingoSeqForm.MatchStatus.value = MatchStatus;
+	document.BingoSeqForm.submit();
+		
+	oDiv = document.getElementById("MoreDiv");
+	oDragger = document.getElementById("MoreTitle");
+	oCloser = document.getElementById("MoreCloser");
+	var Sender = document.getElementById("BingoPos_" + MatchId);
+	MoreLauncher = new DivLauncher(oDiv, oDragger, oCloser);
+	var evt=getEvent();
+	var iX =evt.clientX-520;
+	var iY =evt.clientY+15;
+	MoreLauncher.open(iX, iY);
+}
+
+function popLiveCasino(MatchId, MatchName, ScoreData, ResultData) {
+	var oDiv;
+	var oDragger;
+	var oCloser;
+	
+	if (MoreLauncher != null){
+		MoreLauncher.close();
+	}
+
+	document.getElementById("oMoreContainer").innerHTML = "";
+	
+	document.LiveCasinoForm.MatchId.value = MatchId;
+	document.LiveCasinoForm.MatchName.value = MatchName;
+	document.LiveCasinoForm.ScoreData.value = ScoreData;
+	document.LiveCasinoForm.ResultData.value = ResultData;
+	document.LiveCasinoForm.submit();
+		
+	oDiv = document.getElementById("MoreDiv");
+	oDragger = document.getElementById("MoreTitle");
+	oCloser = document.getElementById("MoreCloser");
+	var Sender = document.getElementById("LiveCasinoPos_" + MatchId);
+	MoreLauncher = new DivLauncher(oDiv, oDragger, oCloser);
+	var evt=getEvent();
+	var iX =evt.clientX-520;
+	var iY =evt.clientY+15;
+	MoreLauncher.open(iX, iY);
+}
+function openKeno() {
+    var selob = document.getElementById("selDate").innerHTML.split("/");
+    var yyyy = selob[2];
+    var mm = padLeft(selob[0], 2);
+    var dd = padLeft(selob[1], 2);
+    var url = "ResultKeno.aspx?date=" + yyyy.toString() + mm.toString() + dd.toString();
+    location.href = url;
+}
+
+function View_RD(obj,gameID) {
+    if (obj.className.indexOf("off") != -1) {
+        $("#" + gameID).attr('class', 'displayOff');
+        obj.className = "iconOdds info";
+    }
+    else {
+        $("#" + gameID).attr('class', 'displayOn');
+        obj.className = "iconOdds info off";
+    }
+}
+
+</script>
+</head>
+<body id="Result" style="padding-bottom:5px" onload="parent.document.title = &#39;Result&#39;;">
+<div class="">
+  <form action="./Result_files/Result.html" method="post" name="form1" target="ResultMain">
+    <input type="hidden" id="mode" name="mode" value="normal">
+    <input type="hidden" id="selectDate" name="selectDate">
+    <input type="hidden" id="sportType" name="sportType">
+    <input type="hidden" id="league" name="league">
+   <div class="titleBar">
+      <div class="title">Result</div>
+      <div class="right" style="display:"><a onclick="openKeno();" class="button mark" title="Keno"><span>Keno</span></a></div>
+      <div class="right"><a href="http://ibc86.net/ResultOutright.aspx" class="button mark" title="Outright"><span>Outright</span></a></div>
+    </div>
+    <div class="board">
+      <ul class="panelInfo">
+        <li><span class="title">Date</span>
+        <div id="f_trigger_b" class="button select"><span id="selDate">03/19/2015</span>
+          <script type="text/javascript">
+			  Calendar.setup({
+				  inputField     :    "selDate",      // id of the input field
+				  ifFormat       :    "mm/dd/y",       // format of the input field
+				  button         :    "f_trigger_b",   // trigger for the calendar (button ID)
+				  //flat : "calendar-container", // ID of the parent element
+				  flatCallback : dateChanged,
+				  singleClick    :    true           // double-click mode
+			  });
+		  </script>
+        </div>
+        <a onclick="dateSubmit(0)" class="button"><span>Today</span></a>
+        <a onclick="dateSubmit(-1)" class="button"><span>Yesterday</span></a>
+
+        </li>
+      </ul>
+      <ul class="panelInfo">
+        <li><span class="title">Sport</span>
+            <div id="SelectSport_Div" tabindex="6" hidefocus="" onkeypress="onKeyPressSelecter(&#39;SelectSport&#39;,event);return false;" onclick="onClickSelecter(&#39;SelectSport&#39;);" class="button select">
+<input type="hidden" name="SelectSport" id="SelectSport" value="1">
+<span id="SelectSport_Txt" title="Soccer">Soccer</span>
+<ul id="SelectSport_menu" class="submenu">
+<li title="Soccer" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;1&#39;,false);SelectChange(&#39;sport&#39;, &#39;1&#39;, &#39;&#39;);">Soccer</li>
+<li title="Number Game" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;161&#39;,false);SelectChange(&#39;sport&#39;, &#39;161&#39;, &#39;&#39;);">Number Game</li>
+<li title="Virtual Soccer" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;180&#39;,false);SelectChange(&#39;sport&#39;, &#39;180&#39;, &#39;&#39;);">Virtual Soccer</li>
+<li title="Virtual Horse Racing" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;181&#39;,false);SelectChange(&#39;sport&#39;, &#39;181&#39;, &#39;&#39;);">Virtual Horse Racing</li>
+<li title="Virtual Greyhounds" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;182&#39;,false);SelectChange(&#39;sport&#39;, &#39;182&#39;, &#39;&#39;);">Virtual Greyhounds</li>
+<li title="Virtual Speedway" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;183&#39;,false);SelectChange(&#39;sport&#39;, &#39;183&#39;, &#39;&#39;);">Virtual Speedway</li>
+<li title="Virtual Motorsports" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;184&#39;,false);SelectChange(&#39;sport&#39;, &#39;184&#39;, &#39;&#39;);">Virtual Motorsports</li>
+<li title="Virtual Cycling" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;185&#39;,false);SelectChange(&#39;sport&#39;, &#39;185&#39;, &#39;&#39;);">Virtual Cycling</li>
+<li title="Virtual Tennis" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;186&#39;,false);SelectChange(&#39;sport&#39;, &#39;186&#39;, &#39;&#39;);">Virtual Tennis</li>
+<li title="Basketball" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;2&#39;,false);SelectChange(&#39;sport&#39;, &#39;2&#39;, &#39;&#39;);">Basketball</li>
+<li title="Ice Hockey" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;4&#39;,false);SelectChange(&#39;sport&#39;, &#39;4&#39;, &#39;&#39;);">Ice Hockey</li>
+<li title="Tennis" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;5&#39;,false);SelectChange(&#39;sport&#39;, &#39;5&#39;, &#39;&#39;);">Tennis</li>
+<li title="Badminton" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;9&#39;,false);SelectChange(&#39;sport&#39;, &#39;9&#39;, &#39;&#39;);">Badminton</li>
+<li title="Cricket" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;27&#39;,false);SelectChange(&#39;sport&#39;, &#39;27&#39;, &#39;&#39;);">Cricket</li>
+<li title="Table Tennis" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectSport&#39;,this,&#39;18&#39;,false);SelectChange(&#39;sport&#39;, &#39;18&#39;, &#39;&#39;);">Table Tennis</li>
+</ul>
+</div>
+
+        </li>
+        <li><span class="title ">League</span>
+            <div id="SelectLeague_Div" tabindex="6" hidefocus="" onkeypress="onKeyPressSelecter(&#39;SelectLeague&#39;,event);return false;" onclick="onClickSelecter(&#39;SelectLeague&#39;);" class="button select">
+<input type="hidden" name="SelectLeague" id="SelectLeague" value="">
+<span id="SelectLeague_Txt" title="All League">All League</span>
+<ul id="SelectLeague_menu" class="submenu">
+<li title="All League" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;&#39;);">All League</li>
+<li title="ARMENIA CUP" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;12227&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;12227&#39;);">ARMENIA CUP</li>
+<li title="AUSTRALIA WESTFIELD FFA CUP QUALIFIERS" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;45008&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;45008&#39;);">AUSTRALIA WESTFIELD FFA CUP QUALIFIERS</li>
+<li title="CLUB FRIENDLY WOMEN" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;425&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;425&#39;);">CLUB FRIENDLY WOMEN</li>
+<li title="CLUB FRIENDLY" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;27&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;27&#39;);">CLUB FRIENDLY</li>
+<li title="CZECH REPUBLIC U21 LEAGUE" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;641&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;641&#39;);">CZECH REPUBLIC U21 LEAGUE</li>
+<li title="GERMANY BUNDESLIGA U19" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;42556&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;42556&#39;);">GERMANY BUNDESLIGA U19</li>
+<li title="GREECE FOOTBALL LEAGUE" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;14323&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;14323&#39;);">GREECE FOOTBALL LEAGUE</li>
+<li title="GREECE SUPER LEAGUE - SPECIALS" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;9869&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;9869&#39;);">GREECE SUPER LEAGUE - SPECIALS</li>
+<li title="GREECE SUPER LEAGUE - SPECIFIC 15 MINS" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;42795&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;42795&#39;);">GREECE SUPER LEAGUE - SPECIFIC 15 MINS</li>
+<li title="GREECE SUPER LEAGUE" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;148&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;148&#39;);">GREECE SUPER LEAGUE</li>
+<li title="INTERNATIONAL FRIENDLY U18" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;728&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;728&#39;);">INTERNATIONAL FRIENDLY U18</li>
+<li title="INTERNATIONAL FRIENDLY U23" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;1026&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;1026&#39;);">INTERNATIONAL FRIENDLY U23</li>
+<li title="LITHUANIA SMSCREDIT.LT A LYGA" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;27917&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;27917&#39;);">LITHUANIA SMSCREDIT.LT A LYGA</li>
+<li title="MALTA BOV PREMIER LEAGUE (PLAY OFF)" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;27763&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;27763&#39;);">MALTA BOV PREMIER LEAGUE (PLAY OFF)</li>
+<li title="POLAND CUP - SPECIALS" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;10639&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;10639&#39;);">POLAND CUP - SPECIALS</li>
+<li title="POLAND CUP - SPECIFIC 15 MINS" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;10640&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;10640&#39;);">POLAND CUP - SPECIFIC 15 MINS</li>
+<li title="POLAND CUP" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;732&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;732&#39;);">POLAND CUP</li>
+<li title="ROMANIA LIGA 1 BERGENBIER - SPECIALS" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;30358&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;30358&#39;);">ROMANIA LIGA 1 BERGENBIER - SPECIALS</li>
+<li title="ROMANIA LIGA 1 BERGENBIER - SPECIFIC 15 MINS" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;37775&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;37775&#39;);">ROMANIA LIGA 1 BERGENBIER - SPECIFIC 15 MINS</li>
+<li title="ROMANIA LIGA 1 BERGENBIER" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;30247&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;30247&#39;);">ROMANIA LIGA 1 BERGENBIER</li>
+<li title="SPAIN TERCERA DIVISION" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;654&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;654&#39;);">SPAIN TERCERA DIVISION</li>
+<li title="TUNISIAN LEAGUE" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;426&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;426&#39;);">TUNISIAN LEAGUE</li>
+<li title="UEFA U17 CHAMPIONSHIP QUALIFIERS (2x40 mins)" onmouseover="onOver(this)" onmouseout="onOut(this)" onclick="setSelecter(&#39;SelectLeague&#39;,this,&#39;42986&#39;,false);SelectChange(&#39;league&#39;, &#39;1&#39;, &#39;42986&#39;);">UEFA U17 CHAMPIONSHIP QUALIFIERS (2x40 mins)</li>
+</ul>
+</div>
+
+        </li>
+      </ul>
+    </div>
+    <div id="WaitLoading" align="center" style="display: none"><img src="./Result_files/loading.gif" vspace="2"></div>
+    <div id="ResultItem" class="tabbox" style="display: block"> 
+      
+      <div class="tabbox_F"> 
+<table class="oddsTable info" width="100%" cellpadding="0" cellspacing="0" border="0">
+
+	<tbody><tr>
+		<th width="110" align="left" nowrap="">Kickoff Time</th>
+		<th width="400" align="left" class="even">Match</th>
+		<th width="95" style="white-space:nowrap;">First Half Score</th>
+		<th width="80" style="white-space:nowrap;" class="even">Final Score</th>
+		<th width="75" align="left">Status</th>
+	</tr>
+	
+        
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">ARMENIA CUP</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 06:00 AM</td>
+		<td><b>FC Pyunik</b> -vs- Alashkert FC</td>
+		<td align="center"><strong>3-1</strong></td>
+		<td align="center"><strong>3-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">AUSTRALIA WESTFIELD FFA CUP QUALIFIERS</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 05:15 AM</td>
+		<td><b>Mudgeeraba SC</b> -vs- Coomera</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>3-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">CLUB FRIENDLY</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Vindbjart</b> -vs- Sandefjord</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>2-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">CLUB FRIENDLY WOMEN</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 07:00 AM</td>
+		<td>Roa (W) (N) -vs- <b>Avaldsnes (W)</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-3</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Valerenga (W) (N)</b> -vs- Arna Bjornar (W)</td>
+		<td align="center"><strong>1-0</strong></td>
+		<td align="center"><strong>2-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">CZECH REPUBLIC U21 LEAGUE</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:30 AM</td>
+		<td>1.SC Znojmo U21 -vs- Banik Ostrava U21</td>
+		<td align="center"><strong>1-2</strong></td>
+		<td align="center"><strong>3-3</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">GERMANY BUNDESLIGA U19</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Augsburg U19 -vs- <b>TSV 1860 Munchen U19</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-2</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">GREECE FOOTBALL LEAGUE</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 09:00 AM</td>
+		<td>Agrotikos Asteras -vs- <b>Anagennisi Karditsas</b></td>
+		<td align="center"><strong>0-2</strong></td>
+		<td align="center"><strong>1-2</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 12:00 PM</td>
+		<td>Iraklis Psachna -vs- AEK Athens</td>
+		<td align="center"><strong>0-1</strong></td>
+		<td align="center"><strong>-</strong></td>
+		<td><strong>Running</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">GREECE SUPER LEAGUE</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos</b> -vs- Asteras Tripolis</td>
+		<td align="center"><strong>1-0</strong></td>
+		<td align="center"><strong>2-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">GREECE SUPER LEAGUE - SPECIALS</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos No.of Corners</b> -vs- Asteras Tripolis No.of Corners</td>
+		<td align="center"><strong>1-1</strong></td>
+		<td align="center"><strong>7-4</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos - Over</b> -vs- Olympiakos - Under</td>
+		<td align="center"><strong>1-0</strong></td>
+		<td align="center"><strong>2-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos 4th Corner</b> -vs- Asteras Tripolis 4th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos 5th Corner</b> -vs- Asteras Tripolis 5th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos 6th Corner</b> -vs- Asteras Tripolis 6th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos 7th Corner</b> -vs- Asteras Tripolis 7th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td>Olympiakos 8th Corner -vs- <b>Asteras Tripolis 8th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td>Olympiakos 1st Corner -vs- <b>Asteras Tripolis 1st corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos 2nd Corner</b> -vs- Asteras Tripolis 2nd Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td>Olympiakos 3rd Corner -vs- <b>Asteras Tripolis 3rd Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td>Asteras Tripolis - Over -vs- Asteras Tripolis - Under</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">GREECE SUPER LEAGUE - SPECIFIC 15 MINS</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td><b>Olympiakos 00:00-15:00</b> -vs- Asteras Tripolis 00:00-15:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td>Olympiakos 15:01-30:00 -vs- Asteras Tripolis 15:01-30:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td>Olympiakos 45:01-60:00 -vs- Asteras Tripolis 45:01-60:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:45 AM</td>
+		<td>Olympiakos 60:01-75:00 -vs- Asteras Tripolis 60:01-75:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">INTERNATIONAL FRIENDLY U18</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Montenegro U18 </b> -vs- Belarus U18</td>
+		<td align="center"><strong>1-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">INTERNATIONAL FRIENDLY U23</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:30 AM</td>
+		<td>Bahrain U23 -vs- Jordan U23</td>
+		<td align="center"><strong>1-2</strong></td>
+		<td align="center"><strong>-</strong></td>
+		<td><strong>Running</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">LITHUANIA SMSCREDIT.LT A LYGA</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Klaipedos Granitas -vs- <b>Kruoja Pakruojis</b></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td align="center"><strong>0-3</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">MALTA BOV PREMIER LEAGUE (PLAY OFF)</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 09:00 AM</td>
+		<td><b>Birkirkara FC</b> -vs- Pieta Hotspurs FC</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>2-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 09:00 AM</td>
+		<td>Floriana FC -vs- Qormi FC</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Hibernians Paola FC -vs- Naxxar Lions FC</td>
+		<td align="center"><strong>2-1</strong></td>
+		<td align="center"><strong>2-2</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">POLAND CUP</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td><b>Podbeskidzie Bielsko Biala</b> -vs- Piast Gliwice</td>
+		<td align="center"><strong>1-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">POLAND CUP - SPECIALS</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala No.of Corners -vs- <b>Piast Gliwice No.of Corners</b></td>
+		<td align="center"><strong>1-4</strong></td>
+		<td align="center"><strong>1-10</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 1st Corner -vs- <b>Piast Gliwice 1st Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 3rd Corner -vs- <b>Piast Gliwice 3rd Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 4th Corner -vs- <b>Piast Gliwice 4th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td><b>Podbeskidzie Bielsko Biala 5th Corner</b> -vs- Piast Gliwice 5th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 6th Corner -vs- <b>Piast Gliwice 6th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 7th Corner -vs- <b>Piast Gliwice 7th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 9th Corner -vs- <b>Piast Gliwice 9th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 10th Corner -vs- <b>Piast Gliwice 10th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Piast Gliwice - Over -vs- Piast Gliwice - Under</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td><b>Podbeskidzie Bielsko Biala - Over</b> -vs- Podbeskidzie Bielsko Biala - Under</td>
+		<td align="center"><strong>1-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">POLAND CUP - SPECIFIC 15 MINS</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 00:00-15:00 -vs- Piast Gliwice 00:00-15:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 15:01-30:00 -vs- Piast Gliwice 15:01-30:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 45:01-60:00 -vs- Piast Gliwice 45:01-60:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 11:00 AM</td>
+		<td>Podbeskidzie Bielsko Biala 60:01-75:00 -vs- Piast Gliwice 60:01-75:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">ROMANIA LIGA 1 BERGENBIER</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td><b>FC Viitorul Constanta</b> -vs- Pandurii Targu Jiu</td>
+		<td align="center"><strong>1-0</strong></td>
+		<td align="center"><strong>4-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias -vs- CFR Cluj</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">ROMANIA LIGA 1 BERGENBIER - SPECIALS</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta No.of Corners -vs- <b>Pandurii Targu Jiu No.of Corners</b></td>
+		<td align="center"><strong>1-5</strong></td>
+		<td align="center"><strong>5-7</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta 1st Corner -vs- <b>Pandurii Targu Jiu 1st Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta 2nd Corner -vs- <b>Pandurii Targu Jiu 2nd Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td><b>FC Viitorul Constanta 3rd Corner</b> -vs- Pandurii Targu Jiu 3rd Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td><b>FC Viitorul Constanta 10th Corner</b> -vs- Pandurii Targu Jiu 10th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td><b>FC Viitorul Constanta 11th Corner</b> -vs- Pandurii Targu Jiu 11th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td><b>FC Viitorul Constanta 12th Corner</b> -vs- Pandurii Targu Jiu 12th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta 13th Corner -vs- Pandurii Targu Jiu 13th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta 4th Corner -vs- <b>Pandurii Targu Jiu 4th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta 5th Corner -vs- <b>Pandurii Targu Jiu 5th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta 7th Corner -vs- <b>Pandurii Targu Jiu 7th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td>FC Viitorul Constanta 8th Corner -vs- <b>Pandurii Targu Jiu 8th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 08:00 AM</td>
+		<td><b>FC Viitorul Constanta 9th Corner</b> -vs- Pandurii Targu Jiu 9th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Gaz Metan Medias No.of Corners</b> -vs- CFR Cluj No.of Corners</td>
+		<td align="center"><strong>3-2</strong></td>
+		<td align="center"><strong>6-5</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Gaz Metan Medias 2nd Corner</b> -vs- CFR Cluj 2nd Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Gaz Metan Medias 3rd Corner</b> -vs- CFR Cluj 3rd Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias 4th Corner -vs- <b>CFR Cluj 4th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Gaz Metan Medias 6th Corner</b> -vs- CFR Cluj 6th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td><b>Gaz Metan Medias 7th Corner</b> -vs- CFR Cluj 7th Corner</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias 8th Corner -vs- <b>CFR Cluj 8th Corner</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias - Over -vs- Gaz Metan Medias - Under</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>CFR Cluj - Over -vs- CFR Cluj - Under</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">ROMANIA LIGA 1 BERGENBIER - SPECIFIC 15 MINS</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias 60:01-75:00 -vs- CFR Cluj 60:01-75:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias 45:01-60:00 -vs- CFR Cluj 45:01-60:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias 15:01-30:00 -vs- CFR Cluj 15:01-30:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 10:00 AM</td>
+		<td>Gaz Metan Medias 00:00-15:00 -vs- CFR Cluj 00:00-15:00</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">SPAIN TERCERA DIVISION</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 06:15 AM</td>
+		<td><b>Zamudio SD</b> -vs- CD Lagun Onak</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>1-0</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 06:15 AM</td>
+		<td>CD Santurtzi -vs- <b>Bermeo FT</b></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td align="center"><strong>0-2</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 07:00 AM</td>
+		<td><b>SCD Durango</b> -vs- Amurrio</td>
+		<td align="center"><strong>0-1</strong></td>
+		<td align="center"><strong>2-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 07:00 AM</td>
+		<td>CD Beti Onak -vs- <b>CA Osasuna B</b></td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>0-3</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 11:45 AM</td>
+		<td>CD Corellano -vs- CD Huarte</td>
+		<td align="center"><strong>0-1</strong></td>
+		<td align="center"><strong>-</strong></td>
+		<td><strong>Running</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 12:00 PM</td>
+		<td>CD Idoya -vs- Pena Sport</td>
+		<td align="center"><strong>0-2</strong></td>
+		<td align="center"><strong>-</strong></td>
+		<td><strong>Running</strong></td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 12:00 PM</td>
+		<td>CD Beroil Bupolsa -vs- Villaralbo CF</td>
+		<td align="center"><strong>0-0</strong></td>
+		<td align="center"><strong>-</strong></td>
+		<td><strong>Running</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">TUNISIAN LEAGUE</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 09:00 AM</td>
+		<td><b>Esperance ST</b> -vs- A.S. Marsa</td>
+		<td align="center"><strong>1-1</strong></td>
+		<td align="center"><strong>3-1</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr>
+    	<td class="tabtitle"></td>
+		<td colspan="6" class="tabtitle">UEFA U17 CHAMPIONSHIP QUALIFIERS (2x40 mins)</td>
+	</tr>
+	
+	<tr class="bgcpe" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpe&#39;">
+		<td nowrap="nowrap">3/19/2015 05:00 AM</td>
+		<td>Serbia U17 (N) -vs- <b>Croatia U17</b></td>
+		<td align="center"><strong>0-1</strong></td>
+		<td align="center"><strong>0-3</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+	<tr class="bgcpelight" onmouseover="this.className=&#39;trbgov&#39;" onmouseout="this.className=&#39;bgcpelight&#39;">
+		<td nowrap="nowrap">3/19/2015 08:30 AM</td>
+		<td>Azerbaijan U17 -vs- <b>Portugal U17</b></td>
+		<td align="center"><strong>0-3</strong></td>
+		<td align="center"><strong>0-3</strong></td>
+		<td><strong>Completed</strong></td>
+	</tr>
+	
+</tbody></table>
+ </div>
+       
+    </div>
+    <div class="note">
+	    <div class="noteBorder">
+            <div class="title"><span>Note</span></div>
+            <div class="content">Please note that the displayed time is based on GMT -4 hours.</div> 
+        </div>
+    </div>
+  </form>
+</div>
+
+<div id="MoreDiv" style="display: none">
+	<div class="popupW">
+        <div id="MoreTitle" class="popupWTitle">
+        	<span>
+                <div class="popWIcon"></div>
+                <div class="popWTitleContain">SCR Info</div>
+                <div id="MoreCloser" class="popWClose" title="Close"></div>
+            </span>
+        </div>
+        <div id="oMoreContainer" class="popWContain"></div>
+    </div>
+</div>
+
+<iframe id="FrameMore" name="FrameMore" style="display: none" onload="document.getElementById(&#39;oMoreContainer&#39;).innerHTML=this.contentWindow.document.body.innerHTML;"></iframe>
+<form name="SCRInfoForm" action="http://ibc86.net/SCRInfoPopup.aspx" target="FrameMore" style="display: none">
+  <input type="hidden" name="EventDate">
+  <input type="hidden" name="LeagueId">
+  <input type="hidden" name="RaceNumber">
+</form>
+<form name="BingoSeqForm" action="http://ibc86.net/ResultPopBingo.aspx" target="FrameMore" style="display: none">
+  <input type="hidden" name="MatchId">
+  <input type="hidden" name="SelFrom">
+  <input type="hidden" name="MatchStatus">
+</form>
+<form name="LiveCasinoForm" action="http://ibc86.net/ResultPopLiveCasino.aspx" target="FrameMore" style="display: none">
+  <input type="hidden" name="MatchId">
+  <input type="hidden" name="MatchName">
+  <input type="hidden" name="ScoreData">
+  <input type="hidden" name="ResultData">
+</form>
+
+
+</body></html>

@@ -1,0 +1,340 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td {
+  background: none repeat scroll 0 0 transparent;
+  border: 0 none;
+  margin: 0;
+  outline: medium none;
+  padding: 0;
+  vertical-align: baseline;
+}
+@font-face {
+  font-family: "HelveticaNeue";
+  src: url(Font/HelveticaNeue.ttf);
+}
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  padding: 0;
+  margin: 0;
+  font-family: HelveticaNeue, Arial, sans-serif;
+  background: url(Images/pattern.jpg) repeat;
+}
+.content {
+  background: url(Images/light.png) no-repeat;
+  width: 822px;
+  height: 600px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -411px;
+}
+.wrapper {
+  width: 300px;
+  margin: auto;
+}
+.header {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: white;
+  padding-top: 50px;
+  line-height: 50px;
+  clear: both;
+}
+.header .title {
+  display: inline-block;
+  float: left;
+  color: #26ce65;
+  font-size: 20px;
+}
+.header .language-box {
+  float: right;
+  margin: 17px 0px 0 0;
+}
+.inputContainer {
+  border-radius: 4px;
+  background: white;
+  margin-top: 100px;
+  position: relative;
+}
+.inputContainer .logo {
+  background: url(Images/logo.png) no-repeat;
+  width: 122px;
+  height: 122px;
+  position: absolute;
+  top: -60px;
+  left: 92px;
+}
+.inputContainer .signIn-text {
+  background: url(Images/SignIn.png) right no-repeat;
+  width: 166px;
+  height: 50px;
+}
+.inputContainer table {
+  width: 80%;
+  margin: auto;
+}
+.inputContainer table .row {
+  padding-bottom: 10px;
+}
+.inputContainer table .row.custom-row {
+  padding-bottom: 8px;
+}
+.inputContainer .language-select {
+  cursor: pointer;
+  float: left;
+  height: 24px;
+  font-size: 13px;
+  width: 110px;
+}
+.inputContainer .language-select .en {
+  background: url(Images/flags.jpg) no-repeat;
+}
+.inputContainer .language-select.ddSelect {
+  position: relative;
+  z-index: 100;
+}
+.inputContainer .language-select.ddSelect .caret {
+  background: url(Images/caret.png) 0px 0px no-repeat;
+  width: 9px;
+  height: 7px;
+  position: absolute;
+  right: 0px;
+  top: 8px;
+}
+.inputContainer .language-select.ddSelect #divItemList {
+  z-index: 200;
+  margin-left: 1px;
+  width: 114px !important;
+  right: 0;
+}
+.inputContainer .language-select.ddSelect #divItemList #lbLanguage {
+  color: #4c4c4c;
+}
+.inputContainer .language-select.ddSelect #divSelectedItem {
+  background-color: transparent !important;
+}
+.inputContainer .language-select.ddSelect #divSelectedItem .flag i {
+  position: absolute;
+  top: 2px;
+  left: 6px;
+}
+.inputContainer .language-select.ddSelect #divSelectedItem #lbLanguage {
+  margin-left: 8px;
+  position: relative;
+  top: -1px;
+  color: #888888;
+}
+.inputContainer .language-select.ddSelect .ddItem .flag i {
+  height: 19px;
+}
+.inputContainer .language-select.ddSelect .ddItem {
+  line-height: 21px;
+}
+.inputContainer .language-select.ddSelect .ddItem:hover {
+  background-color: #f2f2f2 !important;
+}
+.inputContainer .language-select #divItemList {
+  border-color: #d2dbe3;
+}
+.inputContainer .language-select #lbLanguage {
+  font-size: 13px;
+}
+.inputContainer .custom-textbox {
+  width: 86%;
+  padding: 0 5px;
+  font-size: 13px;
+  padding: 0 0 0 30px;
+  height: 26px;
+  border: none;
+  color: #536270;
+  line-height: 26px !important;
+  border: 1px solid #d2dbe3;
+  font-family: HelveticaNeue, Arial, sans-serif;
+  background: white;
+}
+.inputContainer .custom-textbox:focus {
+  font-style: normal;
+  height: 26px;
+  border: none;
+  outline: none;
+  border: 1px solid #d2dbe3;
+}
+.inputContainer .custom-textbox.username {
+  background: url(Images/user.png) no-repeat 5px center white;
+}
+.inputContainer .custom-textbox.password {
+  background: url(Images/key.png) no-repeat 5px white;
+}
+.inputContainer .showPass {
+  height: 14px;
+  float: left;
+  display: block;
+  color: #536270;
+  position: relative;
+  top: -2px;
+  margin-left: 3px;
+  font-size: 12px;
+  width: 100%;
+  text-align: left;
+}
+.inputContainer .showPass .checkShowPass {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin: 0 0 2px 0;
+}
+.inputContainer .showPass span {
+  margin-left: 2px;
+  vertical-align: top;
+  position: relative;
+  top: 0px;
+}
+.inputContainer .inputCaptcha {
+  width: 127px;
+  height: 24px !important;
+  float: left;
+  text-align: center;
+  margin: 2px 0 0 2px;
+  color: #536270;
+  border: none;
+  padding: 0;
+  position: relative;
+  border-radius: 3px;
+  border: 1px solid #d2dbe3;
+}
+.inputContainer .inputCaptcha:focus {
+  background-position: -8px -43px;
+  outline: none;
+  font-style: normal;
+}
+.inputContainer .codeCaptcha {
+  float: left;
+  width: 75px;
+  height: 27px;
+  margin: 2px 2px 2px 0px;
+}
+.inputContainer .btnLogin {
+  background-color: #26ce65;
+  width: 100%;
+  border: none;
+  height: 34px;
+  cursor: pointer;
+  color: white;
+  float: left;
+  font-size: 14px;
+  margin-left: 3px;
+  float: right;
+}
+.inputContainer .btnLogin:hover {
+  background-color: #3fb56b;
+}
+.inputContainer .btnLoginDisable {
+  background-color: #26ce65;
+  width: 100%;
+  border: none;
+  height: 34px;
+  cursor: pointer;
+  color: white;
+  float: left;
+  font-size: 14px;
+  margin-left: 3px;
+  float: right;
+  background-color: #cccccc;
+}
+.inputContainer .btnLoginDisable:hover {
+  background-color: #3fb56b;
+}
+.inputContainer .refreshCont {
+  float: left;
+}
+.inputContainer .refreshCode {
+  margin: 5px 2px 2px 3px;
+  background: url(images/refresh.png) no-repeat;
+  background-position: 0 0;
+  width: 22px;
+  float: left;
+  height: 19px !important;
+  cursor: pointer;
+  padding: 0;
+}
+.inputContainer .refreshCode:hover {
+  background-position: 0 -19px;
+}
+.errorMessage {
+  font-size: 12px;
+  padding: 0 20px;
+  color: #cc0000;
+  padding: 0 25px 10px;
+  border-radius: 5px;
+  font-family: 'Roboto';
+}
+.eq-ie7 .showPass {
+  top: -1px;
+}
+.eq-ie7 .showPass .checkShowPass {
+  top: -5px;
+}
+.eq-ie7 .browser {
+  top: 4px;
+}
